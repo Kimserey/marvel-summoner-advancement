@@ -39,35 +39,24 @@ module Client =
                 values
                 |> List.map(fun (title, mult, value) ->
                     let style = Var.Create ""
-                    match title with 
-                    | Text title -> 
-                          divAttr [ attr.``class`` "form-group"
-                                    attr.styleDyn style.View]
-                                  [ labelAttr [ attr.``for`` title
-                                                attr.``class`` "col-xs-6 control-label" ]
-                                              [ text title ]
-                                    labelAttr [ attr.``for`` title
-                                                attr.``class`` "col-xs-4 control-label" ]
-                                              [ text (string mult + "points x") ]
-                                    divAttr [ attr.``class`` "col-xs-2" ]
-                                            [ Doc.IntInputUnchecked [ attr.``class`` "form-control"
-                                                                      attr.id title
-                                                                      on.focus (fun _ _ -> Var.Set style "border:1px solid blue")
-                                                                      on.blur (fun _ _ -> Var.Set style "") ] value ] ] :> Doc
-                    | TextWithImportant (title, important) ->  
-                          divAttr [ attr.``class`` "form-group"
-                                    attr.styleDyn style.View]
-                                  [ labelAttr [ attr.``for`` title
-                                                attr.``class`` "col-xs-6 control-label" ]
-                                              [ text (title + " - "); spanAttr [ attr.style "color:red;" ] [ text important ] ]
-                                    labelAttr [ attr.``for`` title
-                                                attr.``class`` "col-xs-4 control-label" ]
-                                              [ text (string mult + "points x") ]
-                                    divAttr [ attr.``class`` "col-xs-2" ]
-                                            [ Doc.IntInputUnchecked [ attr.``class`` "form-control"
-                                                                      attr.id title
-                                                                      on.focus (fun _ _ -> Var.Set style "border:1px solid blue")
-                                                                      on.blur (fun _ _ -> Var.Set style "") ] value ] ] :> Doc)
+                    let (id, elements) =
+                        match title with 
+                        | Text title -> title, [ text title ]
+                        | TextWithImportant (title, important) -> title, [ text (title + " - "); spanAttr [ attr.style "color:red;" ] [ text important ] ]
+                        
+                    divAttr [ attr.``class`` "form-group"
+                              attr.styleDyn style.View]
+                            [ labelAttr [ attr.``for`` id
+                                          attr.``class`` "col-xs-6 control-label" ]
+                                          elements
+                              labelAttr [ attr.``for`` id
+                                          attr.``class`` "col-xs-3 control-label" ]
+                                        [ text (string mult + "points x") ]
+                              divAttr [ attr.``class`` "col-xs-3" ]
+                                      [ Doc.IntInputUnchecked [ attr.``class`` "form-control"
+                                                                attr.id id
+                                                                on.focus (fun _ _ -> Var.Set style "border:1px solid blue")
+                                                                on.blur (fun _ _ -> Var.Set style "") ] value ] ] :> Doc)
                                                                       
             let calculate() =
                 values |> List.sumBy (fun (_, mult, value) -> mult * value.Value)
