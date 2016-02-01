@@ -51,7 +51,7 @@ module Client =
                                           elements
                               labelAttr [ attr.``for`` id
                                           attr.``class`` "col-xs-3 control-label" ]
-                                        [ text (string mult + "points x") ]
+                                        [ text (string mult + " pts x") ]
                               divAttr [ attr.``class`` "col-xs-3" ]
                                       [ Doc.IntInputUnchecked [ attr.``class`` "form-control"
                                                                 attr.id id
